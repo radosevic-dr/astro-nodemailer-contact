@@ -40,7 +40,7 @@ export async function sendEmail(data) {
     text: `
       > Ime: ${fullName}
       > Email: ${email}
-      > ${message}
+      > Message: ${message}
     `,
   });
 }

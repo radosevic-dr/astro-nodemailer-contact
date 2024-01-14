@@ -1,9 +1,9 @@
 import { z } from "astro/zod";
 
 export const formSchema = z.object({
-  fullName: z.string().min(3, "Ime mora imati barem 3 karktera!"),
-  email: z.string().email("Nevažeći email!"),
-  message: z.string().min(10, "Poruka mora imati barem 10 karaktera!"),
+  fullName: z.string().min(3, "Name must have at least 3 chars!"),
+  email: z.string().email("Email not valid!"),
+  message: z.string().min(10, "Message must contain at least 10 chars!"),
 
 })
 

@@ -3,7 +3,7 @@ import Layout from "@/layouts/BaseLayout.astro";
 import { Input, TextArea } from "@/components";
 import { sendEmail, validateForm } from "@/utils";
 
-let errors = {};
+let err = {};
 let isValid = false;
 
 if (Astro.request.method === "POST") {
@@ -23,7 +23,7 @@ if (Astro.request.method === "POST") {
             isValid = false;
         }
     } else {
-        errors = validationResult.errors;
+        err = validationResult.errors;
     }
 }
 ---
@@ -34,25 +34,25 @@ if (Astro.request.method === "POST") {
         <div class="dui-container mx-auto min-h-screen">
             <div class="dui-card shadow-xl p-8 mt-8 max-w-md mx-auto">
                 <h2 class="text-2xl font-bold text-success mb-6 text-center">
-                    Kontakt
+                    Contact
                 </h2>
                 <form method="POST">
                     <Input
                         label="fullName"
-                        labelTitle="Puno ime"
+                        labelTitle="Full Name"
                         type="text"
-                        error={errors.fullName}
+                        err={err.fullName}
                     />
                     <Input
                         label="email"
                         labelTitle="Email"
                         type="email"
-                        error={errors.email}
+                        err={err.email}
                     />
                     <TextArea
                         label="message"
-                        labelTitle="Poruka"
-                        error={errors.message}
+                        labelTitle="Message"
+                        err={err.message}
                     />
                     <button
                         
