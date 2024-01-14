@@ -1,0 +1,28 @@
+---
+interface Props {
+  label: string;
+  labelTitle: string;
+  type: any;
+  err?: string;
+  title?: string;
+  pattern?: string;
+}
+const { label, labelTitle, type, err, title, pattern } = Astro.props;
+---
+
+<div class="dui-form-control mb-4">
+  <label class="dui-label" for={label}>
+    <span class="dui-label-text font-semibold">{labelTitle}</span>
+  </label>
+  <input
+    type={type}
+    name={label}
+    id={label}
+    class="dui-input dui-input-bordered hover:border-success/20 hover:shadow-md hover:shadow-success/40"
+    
+    title={title}
+    pattern={pattern}
+  />
+
+  <span class={`block py-2 text-error ${!err ? "hidden" : null}`}>🚩 {err}</span>
+</div>

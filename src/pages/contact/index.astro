@@ -1,0 +1,156 @@
+---
+import Layout from "@/layouts/BaseLayout.astro";
+import { Input, TextArea } from "@/components";
+import { sendEmail, validateForm } from "@/utils";
+
+let errors = {};
+let isValid = false;
+
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const formData = {
+        fullName: data.get("fullName"),
+        email: data.get("email"),
+        message: data.get("message"),
+    };
+    const validationResult = validateForm(formData);
+    isValid = true;
+    if (validationResult.success) {
+        try {
+            await sendEmail(formData);
+            return Astro.redirect("/");
+        } catch (err) {
+            isValid = false;
+        }
+    } else {
+        errors = validationResult.errors;
+    }
+}
+---
+
+<Layout title="Contact" description="">
+    <div class="bg-base-100 min-h-screen relative">
+        {isValid ? <p class="text-center w-full absolute top-0 left-o text-warning">Unesi normalne podatke da te ne nerviram</p> : null}
+        <div class="dui-container mx-auto min-h-screen">
+            <div class="dui-card shadow-xl p-8 mt-8 max-w-md mx-auto">
+                <h2 class="text-2xl font-bold text-success mb-6 text-center">
+                    Kontakt
+                </h2>
+                <form method="POST">
+                    <Input
+                        label="fullName"
+                        labelTitle="Puno ime"
+                        type="text"
+                        error={errors.fullName}
+                    />
+                    <Input
+                        label="email"
+                        labelTitle="Email"
+                        type="email"
+                        error={errors.email}
+                    />
+                    <TextArea
+                        label="message"
+                        labelTitle="Poruka"
+                        error={errors.message}
+                    />
+                    <button
+                        
+                        type="submit"
+                        class="dui-btn dui-btn-success w-full uppercase text-primary font-bold text-lg disabled:btn-neutral"
+                        >Pošalji</button
+                    >
+                </form>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+
+
+<!-- ---
+export const prerender = true;
+import { Resend } from 'resend';
+import Layout from "@/layouts/BaseLayout.astro";
+import { Input, TextArea } from "@/components";
+import { validateForm } from "@/utils";
+
+interface Errors {
+  fullName?: string;
+  email?: string;
+  message?: string;
+}
+let err: Errors = {};
+let isValid = false;
+
+const resend = new Resend(import.meta.env.RESEND_API_KEY);
+
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+
+    const formData = {
+        fullName: data.get("fullName"),
+        email: data.get("email"),
+        message: data.get("message"),
+    };
+
+    const validationResult = validateForm(formData);
+    isValid = true;
+
+    if (validationResult.success) {
+        try {
+            resend.emails.send({
+                from: "onboarding@resend.dev",
+                to: import.meta.env.RESEND_EMAIL,
+                subject: `CodeWilderness - ${formData.fullName}`,
+                text: `
+            > Name: ${formData.fullName} <br />
+            > Email: ${formData.email}<br />
+            > Message: <br/>${formData.message}
+        `,
+            });
+            return Astro.redirect("/");
+        } catch (err) {
+            isValid = false;
+        }
+    } else {
+        err = validationResult.errors;
+    }
+}
+
+---
+
+<Layout title="Contact" description="Kontakt forma za codewilderness authora">
+  <div
+    class="max-w-[30rem] w-[100%] mx-auto bg-base-100 min-h-screen relative my-20"
+  >
+    <div class="dui-container mx-auto min-h-screen">
+      <h2 class="text-2xl font-bold text-success mb-6 text-center">Kontakt</h2>
+      <form id="form" method="POST">
+        <Input
+          label="fullName"
+          labelTitle="Puno ime"
+          type="text"
+          title="Ime mora imati barem tri znaka"
+          pattern="[a-zA-Z]{3, }"
+          err={err.fullName}
+        />
+        <Input
+          label="email"
+          labelTitle="Email"
+          type="email"
+          title="Email nije u ispravnom formatu"
+          pattern="[/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/]"
+          err={err.email}
+        />
+        <TextArea label="message" labelTitle="Poruka" err={err.message}/>
+        <button
+          type="submit"
+          class="dui-btn dui-btn-success w-full uppercase text-primary font-bold text-lg disabled:btn-neutral"
+          >Pošalji</button
+        >
+      </form>
+      
+    </div>
+  </div>
+</Layout> -->

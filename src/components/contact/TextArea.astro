@@ -1,0 +1,17 @@
+---
+interface Props {
+  label: string;
+  labelTitle: string;
+  err?: string;
+}
+
+const { label, labelTitle, err } = Astro.props;
+---
+
+<div class="dui-form-control mb-4">
+  <label class="dui-label" for={label}>
+      <span class="dui-label-text font-semibold">{labelTitle}</span>
+  </label>
+  <textarea name={label} id={label} class="dui-textarea dui-textarea-bordered h-28 hover:border-success/20 hover:shadow-md hover:shadow-success/40" ></textarea>
+  <span class={`pt-2 text-error ${!err ? "hidden" : "text-red"}`}>🚩  {err}</span>
+</div>
